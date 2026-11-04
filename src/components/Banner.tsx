@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { company, type PanelId } from '../data/content';
+import type { PanelId } from '../data/content';
 import WebCanvas from './WebCanvas';
 import logoDark from '../assets/logo-dark.png';
 
@@ -221,9 +221,6 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
         <h1><span>Sales &amp; marketing intelligence</span> <span className="h1-alt">for real growth<b>.</b></span></h1>
         <p className="hero-sub">Demand generation, campaign management, lead capture and CRM integration, delivered by White Raven Tech.</p>
         <div className="hero-actions">
-          <a className="btn btn-dark" href={company.callUrl} target="_blank" rel="noopener noreferrer" tabIndex={p < 0.5 ? -1 : 0}>
-            Book a call <span aria-hidden="true">→</span>
-          </a>
           <button type="button" className="btn-link" onClick={() => onOpen('how')} tabIndex={p < 0.5 ? -1 : 0}>How it works <span aria-hidden="true">→</span></button>
         </div>
       </div>

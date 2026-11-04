@@ -111,6 +111,7 @@ a { color: inherit; }
 .hero-sub { margin: 0; max-width: 470px; color: var(--graphite); font-size: 15.5px; line-height: 1.55;
   max-height: calc(clamp(0, var(--q) * 1.6, 1) * 76px); opacity: clamp(0, calc(var(--q) * 2.2 - .3), 1); overflow: hidden; }
 .hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.hero-actions .btn-link { padding-left: 0; }
 
 /* Grip: a fine handle on the bottom edge */
 .grip {
@@ -127,8 +128,7 @@ a { color: inherit; }
 .banner.is-compact .hero-kicker { display: none; }
 .banner.is-compact .hero h1 { font-size: clamp(18px, calc(var(--h) * .13), 28px); }
 .banner.is-compact .hero h1 span { display: inline; }
-.banner.is-compact .hero-actions .btn-link { display: none; }
-.banner.is-compact .hero-actions .btn { padding: 8px 14px; font-size: 12.5px; }
+.banner.is-compact .hero-actions .btn-link { padding: 2px 0; font-size: 13px; }
 
 /* ---------- Conversation ---------- */
 .silk {
@@ -269,7 +269,7 @@ a { color: inherit; }
   .hero-actions .btn-link { font-size: 13px; }
   .banner.is-compact .hero { bottom: 8px; gap: 6px; }
   .banner.is-compact .hero h1 { font-size: 15.5px; line-height: 1.1; }
-  .banner.is-compact .hero-actions .btn { padding: 7px 12px; font-size: 12px; }
+  .banner.is-compact .hero-actions .btn-link { padding: 2px 0; font-size: 12.5px; }
   .corner-web { width: 46vw; }
   .msg { max-width: 94%; }
   .ix-col { flex-basis: 66vw; margin-right: 16px; padding-right: 12px; }
