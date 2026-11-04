@@ -88,7 +88,7 @@ export default function Assistant({ onOpen }: { onOpen: (id: PanelId) => void })
           <span className={`silk-mark ${busy ? 'is-busy' : ''}`} aria-hidden="true"><img src={glyph} alt="" /></span>
           <div>
             <p className="silk-title">Ask Ämblik</p>
-            <p className="silk-status">{thinking ? 'Spinning up an answer…' : 'Questions about your pipeline, answered'}</p>
+            <p className="silk-status">{thinking ? 'Preparing an answer…' : 'Questions about your pipeline, answered'}</p>
           </div>
         </div>
 

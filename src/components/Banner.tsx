@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { company, type PanelId } from '../data/content';
 import WebCanvas from './WebCanvas';
-import logoLight from '../assets/logo-light.png';
+import logoDark from '../assets/logo-dark.png';
 
 const menu: { id: PanelId; label: string; short: string }[] = [
   { id: 'how', label: 'How It Works', short: 'How' },
@@ -21,7 +21,7 @@ function measure(): Snaps {
   const H = window.innerHeight;
   const mobile = window.innerWidth <= 820;
   const slim = mobile ? 58 : 66;
-  const deck = (document.querySelector('.dial') as HTMLElement | null)?.offsetHeight ?? 240;
+  const deck = (document.querySelector('.index') as HTMLElement | null)?.offsetHeight ?? 240;
   const room = H - deck - (mobile ? 270 : 290); // keep the assistant usable
   const max = clamp(Math.min(room, H * 0.56), slim + 130, 640);
   const normal = clamp(H * (mobile ? 0.28 : 0.3), slim + 110, max - 50);
@@ -156,7 +156,7 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
   useEffect(() => {
     const onWin = (e: WheelEvent) => {
       const t = e.target as HTMLElement;
-      if (t.closest('.dial, .sheet-wrap')) return; // those areas use the wheel themselves
+      if (t.closest('.index, .sheet-wrap')) return; // those areas use the wheel themselves
       // Let the chat scroll first; once it reaches its end, the banner responds.
       const thread = t.closest('.thread') as HTMLElement | null;
       if (thread) {
@@ -202,7 +202,7 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
 
       <nav className="bar" aria-label="Main">
         <a className="brand" href="/" aria-label="Ämblik home">
-          <img src={logoLight} alt="Ämblik" draggable={false} />
+          <img src={logoDark} alt="Ämblik" draggable={false} />
           <span className="brand-by">by White Raven Tech</span>
         </a>
         <ul className="menu">
@@ -217,14 +217,14 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
       </nav>
 
       <div className="hero" aria-hidden={p < 0.5}>
-        <p className="hero-kicker"><i />Sales &amp; marketing intelligence</p>
-        <h1><span>Sales &amp; marketing intelligence</span> <span className="h1-alt">for real growth.</span></h1>
+        <p className="hero-kicker"><i />Sales and marketing intelligence</p>
+        <h1><span>Sales &amp; marketing intelligence</span> <span className="h1-alt">for real growth<b>.</b></span></h1>
         <p className="hero-sub">Demand generation, campaign management, lead capture and CRM integration, delivered by White Raven Tech.</p>
         <div className="hero-actions">
-          <a className="btn btn-cyan" href={company.callUrl} target="_blank" rel="noopener noreferrer" tabIndex={p < 0.5 ? -1 : 0}>
+          <a className="btn btn-dark" href={company.callUrl} target="_blank" rel="noopener noreferrer" tabIndex={p < 0.5 ? -1 : 0}>
             Book a call <span aria-hidden="true">→</span>
           </a>
-          <button type="button" className="btn btn-ghost" onClick={() => onOpen('how')} tabIndex={p < 0.5 ? -1 : 0}>How it works</button>
+          <button type="button" className="btn-link" onClick={() => onOpen('how')} tabIndex={p < 0.5 ? -1 : 0}>How it works <span aria-hidden="true">→</span></button>
         </div>
       </div>
 

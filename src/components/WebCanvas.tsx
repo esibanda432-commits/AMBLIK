@@ -1,16 +1,16 @@
 import { useEffect, useRef } from 'react';
 
-// Live spider web: amber "leads" drift in, get caught on the strands,
-// then travel along a thread to the cyan hub (the dot from the Ämblik logo).
-// Strands ripple where the cursor or a finger touches them.
+// A fine, technical spider web drawn in graphite on bone. Small dots (leads) drift in,
+// are caught on the strands, then travel along a thread to the cyan hub (the dot from
+// the Ämblik logo). Strands ripple gently where the cursor or a finger touches them.
 
 const SPOKES = 14;
 const RINGS = 8;
-const LEADS = 22;
+const LEADS = 14;
 
 type Lead = { x: number; y: number; vx: number; vy: number; state: 'fly' | 'caught' | 'travel'; t: number; hue: string; r: number };
 
-const AMBER = ['#ffb347', '#ff7a2c', '#ffd27a'];
+const INK = ['rgba(10, 12, 15, .7)', 'rgba(10, 12, 15, .5)', 'rgba(74, 80, 88, .6)'];
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
 
 export default function WebCanvas() {
@@ -46,10 +46,10 @@ export default function WebCanvas() {
       const x = fromLeft ? rand(-40, W * 0.35) : rand(W * 0.4, W + 40);
       const y = fromLeft ? rand(-30, H + 30) : (Math.random() < 0.5 ? -20 : H + 20);
       const ang = Math.atan2(hub.y - y, hub.x - x) + rand(-0.5, 0.5);
-      const sp = rand(18, 42);
+      const sp = rand(12, 26);
       const o = l ?? ({} as Lead);
       Object.assign(o, { x, y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, state: 'fly', t: 0,
-        hue: Math.random() < 0.75 ? AMBER[Math.floor(Math.random() * 3)] : '#5fe6f0', r: rand(1.6, 3) });
+        hue: INK[Math.floor(Math.random() * 3)], r: rand(1.3, 2.2) });
       return o;
     };
 
@@ -61,7 +61,7 @@ export default function WebCanvas() {
       if (pointer.active) {
         const dx = x - pointer.x, dy = y - pointer.y, dist = Math.hypot(dx, dy);
         if (dist < 110) {
-          const k = (1 - dist / 110) * 9 * Math.sin(time * 14 + ring);
+          const k = (1 - dist / 110) * 5 * Math.sin(time * 10 + ring);
           x += (dx / (dist || 1)) * k; y += (dy / (dist || 1)) * k;
         }
       }
@@ -72,20 +72,6 @@ export default function WebCanvas() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
 
-      // Glow behind the hub
-      const g = ctx.createRadialGradient(hub.x, hub.y, 0, hub.x, hub.y, R * 1.1);
-      g.addColorStop(0, `rgba(1, 214, 229, ${0.16 + flash * 0.2})`);
-      g.addColorStop(0.5, 'rgba(47, 107, 255, .07)');
-      g.addColorStop(1, 'rgba(47, 107, 255, 0)');
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-
-      // Pointer glow
-      if (pointer.active) {
-        const pg = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 120);
-        pg.addColorStop(0, 'rgba(1, 214, 229, .12)'); pg.addColorStop(1, 'rgba(1, 214, 229, 0)');
-        ctx.fillStyle = pg; ctx.fillRect(pointer.x - 120, pointer.y - 120, 240, 240);
-      }
-
       // Spokes
       ctx.lineWidth = 1;
       for (let s = 0; s < SPOKES; s++) {
@@ -93,7 +79,7 @@ export default function WebCanvas() {
         for (let r = 0; r < RINGS; r++) { const p = point(r, s, time); ctx.lineTo(p.x, p.y); }
         const o = point(RINGS - 1, s, time);
         ctx.lineTo(hub.x + (o.x - hub.x) * 1.6, hub.y + (o.y - hub.y) * 1.6); // anchor threads run off-screen
-        ctx.strokeStyle = 'rgba(1, 214, 229, .28)'; ctx.stroke();
+        ctx.strokeStyle = 'rgba(10, 12, 15, .13)'; ctx.stroke();
       }
       // Capture spiral: rings sag slightly between spokes, like a real web
       for (let r = 0; r < RINGS; r++) {
@@ -105,8 +91,8 @@ export default function WebCanvas() {
           const cx = mx + (hub.x - mx) * 0.08, cy = my + (hub.y - my) * 0.08;
           ctx.quadraticCurveTo(cx, cy, b.x, b.y);
         }
-        ctx.strokeStyle = r % 3 === 2 ? 'rgba(255, 140, 60, .22)' : `rgba(47, 107, 255, ${0.18 + r * 0.02})`;
-        ctx.lineWidth = r === RINGS - 1 ? 1.2 : 0.9;
+        ctx.strokeStyle = r === 2 ? 'rgba(1, 182, 196, .45)' : `rgba(10, 12, 15, ${0.07 + r * 0.008})`;
+        ctx.lineWidth = r === 2 ? 1 : 0.8;
         ctx.stroke();
       }
 
@@ -127,22 +113,26 @@ export default function WebCanvas() {
           l.x += (dx / d) * sp * dt; l.y += (dy / d) * sp * dt;
           // thread behind the travelling lead
           ctx.beginPath(); ctx.moveTo(l.x, l.y); ctx.lineTo(l.x - (dx / d) * 16, l.y - (dy / d) * 16);
-          ctx.strokeStyle = 'rgba(1, 214, 229, .55)'; ctx.lineWidth = 1.5; ctx.stroke();
+          ctx.strokeStyle = 'rgba(1, 182, 196, .7)'; ctx.lineWidth = 1.2; ctx.stroke();
         }
-        const glow = l.state === 'caught' ? 1 + Math.sin(l.t * 18) * 0.5 : 1;
-        ctx.beginPath(); ctx.arc(l.x, l.y, l.r * (l.state === 'caught' ? 1.6 : 1) * glow, 0, Math.PI * 2);
-        ctx.fillStyle = l.state === 'travel' ? '#5fe6f0' : l.hue;
-        ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = l.state === 'fly' ? 6 : 14;
-        ctx.fill(); ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(l.x, l.y, l.r, 0, Math.PI * 2);
+        ctx.fillStyle = l.state === 'travel' ? '#01b6c4' : l.hue;
+        ctx.fill();
+        if (l.state === 'caught') { // a quiet ring marks a captured lead
+          ctx.beginPath(); ctx.arc(l.x, l.y, l.r + 3 + l.t * 6, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(1, 182, 196, ${0.6 - l.t * 0.8})`; ctx.lineWidth = 1; ctx.stroke();
+        }
       }
 
-      // Hub: the cyan dot from the logo
-      flash = Math.max(0, flash - dt * 2.2);
-      const hr = Math.max(5, R * 0.05);
-      ctx.beginPath(); ctx.arc(hub.x, hub.y, hr * (1 + flash * 0.35), 0, Math.PI * 2);
-      ctx.fillStyle = '#01d6e5'; ctx.shadowColor = '#01d6e5'; ctx.shadowBlur = 18 + flash * 30; ctx.fill(); ctx.shadowBlur = 0;
-      ctx.beginPath(); ctx.arc(hub.x, hub.y, hr * (1.9 + flash), 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(1, 214, 229, ${0.35 + flash * 0.4})`; ctx.lineWidth = 1.5; ctx.stroke();
+      // Hub: the cyan dot from the logo, with its fine dark outline
+      flash = Math.max(0, flash - dt * 1.6);
+      const hr = Math.max(3.5, R * 0.026);
+      ctx.beginPath(); ctx.arc(hub.x, hub.y, hr * (2.4 + flash * 1.2), 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(1, 182, 196, ${0.18 + flash * 0.35})`; ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath(); ctx.arc(hub.x, hub.y, hr, 0, Math.PI * 2);
+      ctx.fillStyle = '#01d6e5'; ctx.fill();
+      ctx.lineWidth = 1.5; ctx.strokeStyle = '#0a0c0f'; ctx.stroke();
     };
 
     const tick = (now: number) => {
