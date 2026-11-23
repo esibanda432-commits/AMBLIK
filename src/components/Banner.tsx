@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { PanelId } from '../data/content';
 import WebCanvas from './WebCanvas';
-import logoDark from '../assets/logo-dark.png';
+const logoDark = '/brand/amblik-wordmark.svg';
 
 const menu: { id: PanelId; label: string; short: string }[] = [
   { id: 'how', label: 'How It Works', short: 'How' },
@@ -223,6 +223,7 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
         <div className="hero-actions">
           <button type="button" className="btn-link" onClick={() => onOpen('how')} tabIndex={p < 0.5 ? -1 : 0}>How it works <span aria-hidden="true">→</span></button>
         </div>
+        <img className="hero-character" src="/brand/traveling-strategist.webp" alt="" aria-hidden="true" />
       </div>
 
       <button
