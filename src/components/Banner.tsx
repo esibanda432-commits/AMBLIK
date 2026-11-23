@@ -16,19 +16,17 @@ const ORDER: Mode[] = ['slim', 'normal', 'max'];
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 
-// Snap heights are worked out from the screen, so the page always fits without scrolling.
 function measure(): Snaps {
   const H = window.innerHeight;
   const mobile = window.innerWidth <= 820;
   const slim = mobile ? 58 : 66;
   const deck = (document.querySelector('.index') as HTMLElement | null)?.offsetHeight ?? 240;
-  const room = H - deck - (mobile ? 270 : 290); // keep the assistant usable
+  const room = H - deck - (mobile ? 270 : 290);
   const max = clamp(Math.min(room, H * 0.56), slim + 130, 640);
   const normal = clamp(H * (mobile ? 0.28 : 0.3), slim + 110, max - 50);
   return { slim, normal, max };
 }
 
-// Elastic resistance when pulled past either end.
 const rubber = (h: number, s: Snaps) =>
   h > s.max ? s.max + Math.min(80, (h - s.max) * 0.35)
   : h < s.slim ? s.slim - Math.min(16, (s.slim - h) * 0.3)
@@ -53,7 +51,6 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
 
   const setHeight = (v: number) => { hRef.current = v; setH(v); };
 
-  // Spring animation: settles with a slight elastic overshoot.
   const animateTo = useCallback((target: number, velocity = 0) => {
     cancelAnimationFrame(spring.current.raf);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setHeight(target); return; }
@@ -83,7 +80,6 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
     snapTo(ORDER[clamp(ORDER.indexOf(modeRef.current) + dir, 0, 2)]);
   }, [snapTo]);
 
-  // Measure on load and on resize, keeping the current size mode.
   useLayoutEffect(() => {
     const update = () => {
       const s = measure();
@@ -92,12 +88,11 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
       if (drag.current.id === -1) { cancelAnimationFrame(spring.current.raf); setHeight(s[modeRef.current]); }
     };
     update();
-    const t = setTimeout(update, 80); // once the carousel has its real height
+    const t = setTimeout(update, 80);
     window.addEventListener('resize', update);
     return () => { clearTimeout(t); window.removeEventListener('resize', update); cancelAnimationFrame(spring.current.raf); };
   }, []);
 
-  // ---- Pull down / swipe up (tracked on the window, so dragging below the banner still works) ----
   const onDown = (e: React.PointerEvent) => {
     if (e.button !== 0) return;
     cancelAnimationFrame(spring.current.raf);
@@ -129,7 +124,6 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
       if (!d.moved) { animateTo(snapsRef.current[modeRef.current]); return; }
       setDragging(false);
       const s = snapsRef.current;
-      // A quick flick moves a step in that direction; otherwise settle at the nearest size.
       const target = Math.abs(d.v) > 0.45
         ? ORDER[clamp(ORDER.indexOf(nearest(d.h, s)) + (d.v > 0 ? 1 : -1), 0, 2)]
         : nearest(hRef.current, s);
@@ -140,12 +134,11 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
     window.addEventListener('pointerup', up);
     window.addEventListener('pointercancel', up);
   };
-  // Ignore the click that ends a drag, so buttons don't fire by accident.
+
   const onClickCapture = (e: React.MouseEvent) => {
     if (drag.current.moved) { e.preventDefault(); e.stopPropagation(); }
   };
 
-  // ---- Mouse wheel / trackpad: scroll down to slim it, scroll up to open it ----
   const wheelStep = useCallback((deltaY: number) => {
     const now = Date.now();
     if (Math.abs(deltaY) < 6 || now < wheelLock.current) return;
@@ -156,8 +149,7 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
   useEffect(() => {
     const onWin = (e: WheelEvent) => {
       const t = e.target as HTMLElement;
-      if (t.closest('.index, .sheet-wrap')) return; // those areas use the wheel themselves
-      // Let the chat scroll first; once it reaches its end, the banner responds.
+      if (t.closest('.index, .sheet-wrap')) return;
       const thread = t.closest('.thread') as HTMLElement | null;
       if (thread) {
         const atTop = thread.scrollTop <= 1;
@@ -170,7 +162,6 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
     return () => window.removeEventListener('wheel', onWin);
   }, [wheelStep]);
 
-  // Subtle cursor parallax.
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let f = 0;
@@ -183,8 +174,7 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
     return () => { window.removeEventListener('pointermove', onMove); cancelAnimationFrame(f); };
   }, []);
 
-  // Progress values decide what shows at each size.
-  const compact = snaps.normal - snaps.slim < 170; // short screens get a tighter hero
+  const compact = snaps.normal - snaps.slim < 170;
   const p = clamp((h - snaps.slim) / Math.max(1, snaps.normal - snaps.slim), 0, 1.15);
   const q = clamp((h - snaps.normal) / Math.max(1, snaps.max - snaps.normal), 0, 1.2);
 

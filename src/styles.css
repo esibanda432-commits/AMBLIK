@@ -19,7 +19,7 @@
   --violet: #7846E8;
   --orchid: #A044A5;
   --gold: #D7A24D;
-  --cyan-ink: #0E5C59;   /* cyan dark enough for text on light backgrounds */
+  --cyan-ink: #0E5C59;
   --display: 'Sora', 'Inter', system-ui, sans-serif;
   --sans: 'Inter', system-ui, sans-serif;
   --ease: cubic-bezier(.22, .8, .2, 1);
@@ -288,7 +288,6 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
 }
-
 
 /* AMBLIK founder identity refresh — balanced website application */
 body { background: #F3F6F6; color: #102437; }
