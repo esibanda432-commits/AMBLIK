@@ -329,8 +329,4 @@ body { background: #F3F6F6; color: #102437; }
 .sheet .btn { border-radius: 6px; }
 .web-wrap { opacity: .48; }
 .corner-web { display: none; }
-@media (max-width: 820px) {
-  .brand img { height: 23px; }
-  }
-@media (prefers-reduced-motion: reduce) {
-  }
+@media (max-width: 820px) { .brand img { height: 23px; } }
