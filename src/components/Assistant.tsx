@@ -1,26 +1,11 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { aiReply, greeting, localReply, suggestions, type Action, type Reply } from '../data/assistant';
 import type { PanelId } from '../data/content';
-import glyph from '../assets/glyph-dark.png';
+const glyph = '/brand/amblik-app-icon.svg';
 
 interface Msg { id: number; role: 'user' | 'assistant'; text: string; actions?: Action[]; typing?: boolean }
 
 let nextId = 1;
-
-// Corner web drawn behind the conversation.
-function CornerWeb() {
-  const spokes = Array.from({ length: 9 }, (_, i) => (i / 8) * 90);
-  const rings = [60, 120, 185, 255, 330];
-  const pt = (r: number, a: number) => [Math.cos((a * Math.PI) / 180) * r, Math.sin((a * Math.PI) / 180) * r];
-  return (
-    <svg className="corner-web" viewBox="0 0 340 340" aria-hidden="true">
-      {spokes.map(a => { const [x, y] = pt(340, a); return <line key={a} x1="0" y1="0" x2={x} y2={y} />; })}
-      {rings.map(r => (
-        <path key={r} d={spokes.map((a, i) => { const [x, y] = pt(r, a); return `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`; }).join(' ')} />
-      ))}
-    </svg>
-  );
-}
 
 export default function Assistant({ onOpen }: { onOpen: (id: PanelId) => void }) {
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -82,7 +67,6 @@ export default function Assistant({ onOpen }: { onOpen: (id: PanelId) => void })
 
   return (
     <section className="silk" aria-label="Ask Ämblik">
-      <CornerWeb />
       <div className="silk-inner">
         <div className="silk-head">
           <span className={`silk-mark ${busy ? 'is-busy' : ''}`} aria-hidden="true"><img src={glyph} alt="" /></span>

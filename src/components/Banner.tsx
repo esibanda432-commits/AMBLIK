@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { PanelId } from '../data/content';
 import WebCanvas from './WebCanvas';
-import logoDark from '../assets/logo-dark.png';
+const logoDark = '/brand/amblik-wordmark.svg';
 
 const menu: { id: PanelId; label: string; short: string }[] = [
   { id: 'how', label: 'How It Works', short: 'How' },
