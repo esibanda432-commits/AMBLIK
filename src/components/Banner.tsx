@@ -223,7 +223,6 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
         <div className="hero-actions">
           <button type="button" className="btn-link" onClick={() => onOpen('how')} tabIndex={p < 0.5 ? -1 : 0}>How it works <span aria-hidden="true">→</span></button>
         </div>
-        <img className="hero-character" src="/brand/traveling-strategist.webp" alt="" aria-hidden="true" />
       </div>
 
       <button
