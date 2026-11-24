@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { aiReply, greeting, localReply, suggestions, type Action, type Reply } from '../data/assistant';
 import type { PanelId } from '../data/content';
-const glyph = '/brand/amblik-app-icon.svg';
+const glyph = '/brand/amblik-glyph-reverse.svg';
 
 interface Msg { id: number; role: 'user' | 'assistant'; text: string; actions?: Action[]; typing?: boolean }
 

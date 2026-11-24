@@ -2,6 +2,9 @@ import { useEffect, useRef } from 'react';
 
 // Purposeful connection geometry: a small number of meaningful nodes and paths.
 // This is a workflow/network motif, not a literal spider web.
+// Brand palette: turquoise / deep teal paths, with violet, orchid and gold as node accents.
+const EDGE = ['rgba(62,199,207,.7)','rgba(16,36,55,.22)','rgba(14,92,89,.5)','rgba(16,36,55,.22)','rgba(120,70,232,.4)'];
+const NODE = ['#102437','#D7A24D','#7846E8','#A044A5','#0E5C59'];
 export default function WebCanvas() {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -29,11 +32,11 @@ export default function WebCanvas() {
       ctx!.lineWidth = 1.15;
       edges.forEach(([a,b],i)=>{
         ctx!.beginPath(); ctx!.moveTo(pts[a].x,pts[a].y); ctx!.lineTo(pts[b].x,pts[b].y);
-        ctx!.strokeStyle = i%4===0?'rgba(14,92,89,.55)':'rgba(16,36,55,.2)'; ctx!.stroke();
+        ctx!.strokeStyle = EDGE[i%EDGE.length]; ctx!.stroke();
       });
       pts.forEach((p,i)=>{
         ctx!.beginPath(); ctx!.arc(p.x,p.y,i===2||i===4?4.5:3,0,Math.PI*2);
-        ctx!.fillStyle = i===2?'#FF3B1F':i===4?'#3EC7CF':i%3===0?'#D7A24D':'#102437'; ctx!.fill();
+        ctx!.fillStyle = i===2?'#FF3B1F':i===4?'#3EC7CF':NODE[i%NODE.length]; ctx!.fill();
       });
     };
     const tick=(now:number)=>{draw(now-start);raf=requestAnimationFrame(tick);};
