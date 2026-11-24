@@ -189,6 +189,10 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
       <div className="bg" aria-hidden="true" />
       <div className="web-wrap" aria-hidden="true"><WebCanvas /></div>
       <div className="veil" aria-hidden="true" />
+      <figure className="hero-art" aria-hidden="true">
+        <img src="/brand/spider-field.jpg" alt="" draggable={false} />
+        <figcaption><i />The Traveling Strategist</figcaption>
+      </figure>
 
       <nav className="bar" aria-label="Main">
         <a className="brand" href="/" aria-label="Ämblik home">
@@ -207,8 +211,8 @@ export default function Banner({ onOpen }: { onOpen: (id: PanelId) => void }) {
       </nav>
 
       <div className="hero" aria-hidden={p < 0.5}>
-        <p className="hero-kicker"><i />Sales and marketing intelligence</p>
-        <h1><span>Sales &amp; marketing intelligence</span> <span className="h1-alt">for real growth<b>.</b></span></h1>
+        <p className="hero-kicker"><i />Sales &amp; marketing intelligence for real growth</p>
+        <h1><span>Connections</span> <span className="h1-alt">with a purpose<b>.</b></span></h1>
         <p className="hero-sub">Demand generation, campaign management, lead capture and CRM integration, delivered by White Raven Tech.</p>
         <div className="hero-actions">
           <button type="button" className="btn-link" onClick={() => onOpen('how')} tabIndex={p < 0.5 ? -1 : 0}>How it works <span aria-hidden="true">→</span></button>
